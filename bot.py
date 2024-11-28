@@ -1,11 +1,11 @@
-import subprocess
+import subprocess  # Import subprocess for running shell commands
 from telegram import Update
-from telegram.ext import Updater, CommandHandler, CallbackContext
+from telegram.ext import Application, CommandHandler, ContextTypes
 
 # Replace this with your bot's token
 BOT_TOKEN = "7678398628:AAGsmPlqC3HjcV9qHiZZQfm3i9v6xif2W6w"
 
-def track_command(update: Update, context: CallbackContext) -> None:
+async def track_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     try:
         # Execute the SSH command to generate the temporary link
         command = "ssh -R maxsoft:80:localhost:8080 serveo.net"
@@ -21,22 +21,22 @@ def track_command(update: Update, context: CallbackContext) -> None:
         
         # Send the link back to the user
         if link:
-            update.message.reply_text(f"Here is your generated link:\n{link}")
+            await update.message.reply_text(f"Here is your generated link:\n{link}")
         else:
-            update.message.reply_text("Failed to generate the link. Please try again.")
+            await update.message.reply_text("Failed to generate the link. Please try again.")
     
     except Exception as e:
-        update.message.reply_text(f"An error occurred: {str(e)}")
+        await update.message.reply_text(f"An error occurred: {str(e)}")
 
 def main():
-    updater = Updater(BOT_TOKEN)
+    # Create an application instance with your bot token
+    application = Application.builder().token(BOT_TOKEN).build()
 
     # Add command handler for /track
-    updater.dispatcher.add_handler(CommandHandler("track", track_command))
+    application.add_handler(CommandHandler("track", track_command))
 
     # Start the bot
-    updater.start_polling()
-    updater.idle()
+    application.run_polling()
 
 if __name__ == "__main__":
     main()
