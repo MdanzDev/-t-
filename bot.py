@@ -1,4 +1,4 @@
-import subprocess  # Import subprocess for running shell commands
+import subprocess  # Import subprocess for shell commands
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 
@@ -29,10 +29,10 @@ async def track_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         await update.message.reply_text(f"An error occurred: {str(e)}")
 
 def main():
-    # Create an application instance with your bot token
+    # Create an Application instance with your bot token
     application = Application.builder().token(BOT_TOKEN).build()
 
-    # Add command handler for /track
+    # Add a command handler for /track
     application.add_handler(CommandHandler("track", track_command))
 
     # Start the bot
